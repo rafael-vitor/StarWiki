@@ -18,57 +18,32 @@ import {
   StatusBar,
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-declare const global: {HermesInternal: null | {}};
+const Colors = {
+  yellow: '#FFEF5C',
+  black: '#1f1f1f',
+  grey: '#534c57',
+}
 
 const App = () => {
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
+      <SafeAreaView style={styles.body}>
+        <View style={styles.titleWrapper}>
+          <Text style={styles.title}>STAR WIKI</Text>
+          <Text style={styles.description}>
+            Your StarWars info database.
+          </Text>
+        </View>
+        <ScrollView contentInsetAdjustmentBehavior="automatic">
+          <View style={styles.characterCard}>
+            <Text style={styles.characterCardTitle}>Luke Skywalker</Text>
+          </View>
+          <View style={styles.characterCard}>
+            <Text style={styles.characterCardTitle}>Leia Skywalker</Text>
+          </View>
+          <View style={styles.characterCard}>
+            <Text style={styles.characterCardTitle}>Han Solo</Text>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -77,41 +52,35 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
   body: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.black,
+    height: '100%',
+    padding: 24,
   },
-  sectionContainer: {
+  titleWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  characterCard: {
     marginTop: 32,
-    paddingHorizontal: 24,
+    padding: 16,
+    borderRadius: 6,
+    backgroundColor: Colors.grey,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
+  characterCardTitle: {
+    fontSize: 20,
+    color: Colors.yellow,
   },
-  sectionDescription: {
+  title: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: Colors.yellow,
+  },
+  description: {
     marginTop: 8,
     fontSize: 18,
     fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+    color: Colors.yellow,
   },
 });
 
