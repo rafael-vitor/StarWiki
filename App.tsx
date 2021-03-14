@@ -8,32 +8,34 @@
  * @format
  */
 
-import React, { useEffect, useState } from 'react';
-import { StatusBar } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StatusBar} from 'react-native';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+
+import StoreProvider from './src/hooks/store';
 
 import CharacterList from './src/screens/CharacterList';
-import CharacterView from  './src/screens/CharacterView'
+import CharacterView from './src/screens/CharacterView';
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
-    <>
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="CharacterList"
-          component={CharacterList}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen name="CharacterView" component={CharacterView} />
-      </Stack.Navigator>
-    </NavigationContainer>
-    </>
-  )
+    <StoreProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="CharacterList"
+            component={CharacterList}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen name="CharacterView" component={CharacterView} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </StoreProvider>
+  );
 };
 
 export default App;

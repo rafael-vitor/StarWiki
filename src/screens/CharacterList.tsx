@@ -9,7 +9,6 @@
  */
 
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {useNavigation} from '@react-navigation/native';
 
 import {
@@ -23,20 +22,15 @@ import {
 } from 'react-native';
 
 import {Colors} from '../../constants';
+import {Character, useStore} from '../hooks/store';
 
 const CharacterList = () => {
-  const [characters, setCharacters] = useState([]);
+  const {charactersList, fetchCharacters} = useStore();
+
   const {navigate} = useNavigation();
 
-  const fetchData = async () => {
-    const result = await axios.get('https://swapi.dev/api/people/?page=1');
-    const {data} = result;
-    // console.log(data.results);
-    setCharacters(data.results);
-  };
-
   useEffect(() => {
-    fetchData();
+    fetchCharacters();
   }, []);
 
   return (
@@ -48,14 +42,12 @@ const CharacterList = () => {
           <Text style={styles.description}>Your StarWars info database.</Text>
         </View>
         <ScrollView contentInsetAdjustmentBehavior="automatic">
-          {characters.map((
-            c: any, //TODO: type
-          ) => (
+          {charactersList.map((c: Character, index: number) => (
             <TouchableOpacity
-              key={c.name}
+              key={c.url}
               style={styles.characterCard}
               onPress={() => {
-                navigate('CharacterView');
+                navigate('CharacterView', {selectedIndex: index});
               }}>
               <Text style={styles.characterCardTitle}>{c.name}</Text>
             </TouchableOpacity>
