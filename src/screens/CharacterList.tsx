@@ -8,48 +8,61 @@
  * @format
  */
 
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import {useNavigation} from '@react-navigation/native';
+
 import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
   View,
   Text,
+  StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 
-import { Colors } from '../../constants';
+import {Colors} from '../../constants';
 
 const CharacterList = () => {
-  const [characters, setCharacters] = useState([])
+  const [characters, setCharacters] = useState([]);
+  const {navigate} = useNavigation();
 
   const fetchData = async () => {
-    const result = await axios.get('https://swapi.dev/api/people/?page=1')
-    const { data } = result;
-    console.log(data.results);
+    const result = await axios.get('https://swapi.dev/api/people/?page=1');
+    const {data} = result;
+    // console.log(data.results);
     setCharacters(data.results);
-  }
+  };
 
   useEffect(() => {
     fetchData();
-  }, [])
+  }, []);
 
   return (
-    <SafeAreaView style={styles.body}>
-      <View style={styles.titleWrapper}>
-        <Text style={styles.title}>STAR WIKI</Text>
-        <Text style={styles.description}>
-          Your StarWars info database.
-        </Text>
-      </View>
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
-        {characters.map((c: any) => ( //TODO: type
-          <View style={styles.characterCard}>
-            <Text style={styles.characterCardTitle}>{c.name}</Text>
-          </View>
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+    <>
+      <StatusBar barStyle="dark-content" />
+      <SafeAreaView style={styles.body}>
+        <View style={styles.titleWrapper}>
+          <Text style={styles.title}>STAR WIKI</Text>
+          <Text style={styles.description}>Your StarWars info database.</Text>
+        </View>
+        <ScrollView contentInsetAdjustmentBehavior="automatic">
+          {characters.map((
+            c: any, //TODO: type
+          ) => (
+            <TouchableOpacity
+              key={c.name}
+              style={styles.characterCard}
+              onPress={() => {
+                navigate('CharacterView');
+              }}>
+              <Text style={styles.characterCardTitle}>{c.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </SafeAreaView>
+    </>
   );
 };
 
