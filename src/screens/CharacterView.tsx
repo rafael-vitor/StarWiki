@@ -9,12 +9,18 @@
  */
 
 import React from 'react';
-import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
-
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import {useRoute, RouteProp} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type ParamList = {
-  CharacterView: {selectedIndex: number};
+  CharacterView: {selectedCharacter: string};
 };
 
 type CharacterViewRouteProp = RouteProp<ParamList, 'CharacterView'>;
@@ -23,24 +29,38 @@ import {Colors} from '../../constants';
 import {useStore} from '../hooks/store';
 
 const CharacterView = () => {
-  const {charactersList} = useStore();
+  const {charactersList, bookmarks, toggleBookmark} = useStore();
   const {
-    params: {selectedIndex},
+    params: {selectedCharacter},
   } = useRoute<CharacterViewRouteProp>();
 
-  const character = charactersList[selectedIndex];
+  const character = charactersList.filter(c => c.name === selectedCharacter)[0];
+
+  const isBookmarked = bookmarks.includes(character.name);
 
   return (
     <SafeAreaView style={styles.body}>
       <View style={styles.wrapper}>
-        <Text style={styles.name}>{character.name}</Text>
-        <Text style={styles.info}>Gender: {character.gender}</Text>
-        {/* <Text style={styles.info}>Homeworld: {character.homeworld}</Text> */}
-        <Text style={styles.info}>Birth year: {character.birth_year}</Text>
-        <Text style={styles.info}>Height: {character.height}</Text>
-        <Text style={styles.info}>Mass: {character.mass}</Text>
-        <Text style={styles.info}>Hair color: {character.hair_color}</Text>
-        <Text style={styles.info}>Skin color: {character.skin_color}</Text>
+        <View>
+          <Text style={styles.name}>{character.name}</Text>
+          <Text style={styles.info}>Gender: {character.gender}</Text>
+          <Text style={styles.info}>Birth year: {character.birth_year}</Text>
+          <Text style={styles.info}>Height: {character.height}</Text>
+          <Text style={styles.info}>Mass: {character.mass}</Text>
+          <Text style={styles.info}>Hair color: {character.hair_color}</Text>
+          <Text style={styles.info}>Skin color: {character.skin_color}</Text>
+        </View>
+        <TouchableOpacity
+          testID="ToogleFavorite"
+          onPress={() => toggleBookmark(character.name)}>
+          <Text>
+            <Icon
+              name="stars"
+              size={30}
+              color={isBookmarked ? Colors.yellow : Colors.black}
+            />
+          </Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -53,6 +73,8 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   wrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     backgroundColor: Colors.grey,
     minHeight: '90%',
     borderRadius: 6,

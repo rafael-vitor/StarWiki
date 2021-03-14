@@ -24,16 +24,22 @@ import {
 } from 'react-native';
 
 import {Colors} from '../../constants';
-import {Character, useStore} from '../hooks/store';
+import {useStore} from '../hooks/store';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const CharacterList = () => {
-  const {charactersList, fetchCharacters} = useStore();
+  const {charactersList, fetchCharacters, bookmarks} = useStore();
 
   const {navigate} = useNavigation();
 
   useEffect(() => {
     fetchCharacters();
   }, []);
+
+  const orderedByBookmarked = [
+    ...charactersList.filter(c => bookmarks.includes(c.name)),
+    ...charactersList.filter(c => !bookmarks.includes(c.name)),
+  ]
 
   return (
     <>
@@ -44,18 +50,29 @@ const CharacterList = () => {
           <Text style={styles.description}>Your StarWars info database.</Text>
         </View>
         <FlatList
-          data={charactersList}
+          data={orderedByBookmarked}
           onEndReached={fetchCharacters}
           onEndReachedThreshold={0.2}
           keyExtractor={(item) => item.url}
-          ListFooterComponent={() => <ActivityIndicator style={styles.loading} size="large" color={Colors.yellow} />}
+          ListFooterComponent={() => (
+            <ActivityIndicator
+              style={styles.loading}
+              color={Colors.yellow}
+              size="large"
+            />
+          )}
           renderItem={({item, index}) => (
             <TouchableOpacity
               style={styles.characterCard}
               onPress={() => {
-                navigate('CharacterView', {selectedIndex: index});
+                navigate('CharacterView', {selectedCharacter: item.name});
               }}>
               <Text style={styles.characterCardTitle}>{item.name}</Text>
+              <Icon
+                name="stars"
+                size={30}
+                color={bookmarks.includes(item.name) ? Colors.yellow : Colors.black}
+              />
             </TouchableOpacity>
           )}
         />
@@ -69,6 +86,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.black,
     height: '100%',
     padding: 24,
+    paddingBottom: 0,
   },
   titleWrapper: {
     justifyContent: 'center',
@@ -79,6 +97,8 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 6,
     backgroundColor: Colors.grey,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   characterCardTitle: {
     fontSize: 20,

@@ -7,11 +7,6 @@ import React, {
 
 import axios from 'axios';
 
-type StoreContext = {
-  charactersList: Array<Character>;
-  fetchCharacters: () => void;
-};
-
 export type Character = {
   birth_year: string;
   created: string;
@@ -31,16 +26,34 @@ export type Character = {
   vehicles: Array<string>;
 };
 
+type StoreContext = {
+  charactersList: Array<Character>;
+  bookmarks: Array<string>;
+  fetchCharacters: () => void;
+  toggleBookmark: (selected: string) => void;
+};
+
 export const StoreContext = createContext<StoreContext>({
   charactersList: [],
+  bookmarks: [],
   fetchCharacters: () => {},
+  toggleBookmark: () => {},
 });
 
 export default function StoreProvider(props: PropsWithChildren<{}>) {
   const [charactersList, setCharactersList] = useState<Array<Character>>([]);
+  const [bookmarks, setBookmarks] = useState<Array<string>>([]);
   const [nextPageUrl, setNextPageUrl] = useState(
     'https://swapi.dev/api/people/?page=1',
   );
+
+  const toggleBookmark = (selected: string) => {
+    if (bookmarks.includes(selected)) {
+      setBookmarks(bookmarks.filter(i => i !== selected));
+    } else {
+      setBookmarks([...bookmarks, selected])
+    }
+  }
 
   const fetchCharacters = async () => {
     const {data} = await axios.get(nextPageUrl);
@@ -53,6 +66,8 @@ export default function StoreProvider(props: PropsWithChildren<{}>) {
   const storeContext = {
     charactersList,
     fetchCharacters,
+    bookmarks,
+    toggleBookmark,
   };
 
   return (
