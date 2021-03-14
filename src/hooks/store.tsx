@@ -29,7 +29,7 @@ export type Character = {
   starships: Array<string>;
   url: string;
   vehicles: Array<string>;
-}
+};
 
 export const StoreContext = createContext<StoreContext>({
   charactersList: [],
@@ -38,11 +38,16 @@ export const StoreContext = createContext<StoreContext>({
 
 export default function StoreProvider(props: PropsWithChildren<{}>) {
   const [charactersList, setCharactersList] = useState<Array<Character>>([]);
+  const [nextPageUrl, setNextPageUrl] = useState(
+    'https://swapi.dev/api/people/?page=1',
+  );
 
   const fetchCharacters = async () => {
-    const { data } = await axios.get('https://swapi.dev/api/people/?page=1');
-    // console.log(data.results);
-    setCharactersList([...charactersList, ...data.results]);
+    const {data} = await axios.get(nextPageUrl);
+    const {results, next} = data;
+
+    setNextPageUrl(next);
+    setCharactersList([...charactersList, ...results]);
   };
 
   const storeContext = {

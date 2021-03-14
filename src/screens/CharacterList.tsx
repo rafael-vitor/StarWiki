@@ -19,6 +19,8 @@ import {
   Text,
   StatusBar,
   TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
 } from 'react-native';
 
 import {Colors} from '../../constants';
@@ -41,18 +43,22 @@ const CharacterList = () => {
           <Text style={styles.title}>STAR WIKI</Text>
           <Text style={styles.description}>Your StarWars info database.</Text>
         </View>
-        <ScrollView contentInsetAdjustmentBehavior="automatic">
-          {charactersList.map((c: Character, index: number) => (
+        <FlatList
+          data={charactersList}
+          onEndReached={fetchCharacters}
+          onEndReachedThreshold={0.2}
+          keyExtractor={(item) => item.url}
+          ListFooterComponent={() => <ActivityIndicator style={styles.loading} size="large" color={Colors.yellow} />}
+          renderItem={({item, index}) => (
             <TouchableOpacity
-              key={c.url}
               style={styles.characterCard}
               onPress={() => {
                 navigate('CharacterView', {selectedIndex: index});
               }}>
-              <Text style={styles.characterCardTitle}>{c.name}</Text>
+              <Text style={styles.characterCardTitle}>{item.name}</Text>
             </TouchableOpacity>
-          ))}
-        </ScrollView>
+          )}
+        />
       </SafeAreaView>
     </>
   );
@@ -88,6 +94,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '400',
     color: Colors.yellow,
+  },
+  loading: {
+    marginTop: 16,
+    marginBottom: 24,
   },
 });
 
