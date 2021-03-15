@@ -23,18 +23,21 @@ const Stack = createStackNavigator();
 
 const App = () => {
   return (
-    <StoreProvider>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="CharacterList"
-            component={CharacterList}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen name="CharacterView" component={CharacterView} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </StoreProvider>
+    <>
+      <StatusBar barStyle="dark-content" />
+      <StoreProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="CharacterList"
+              component={CharacterList}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen name="CharacterView" component={CharacterView} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </StoreProvider>
+    </>
   );
 };
 

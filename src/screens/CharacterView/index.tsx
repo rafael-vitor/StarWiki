@@ -10,7 +10,6 @@
 
 import React, {useEffect, useState} from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   View,
   Text,
@@ -27,8 +26,8 @@ type ParamList = {
 
 type CharacterViewRouteProp = RouteProp<ParamList, 'CharacterView'>;
 
-import {Colors} from '../../constants';
-import {useStore} from '../hooks/store';
+import {Colors} from '../../../constants';
+import {useStore} from '../../hooks/store';
 
 const CharacterView = () => {
   const {charactersList, bookmarks, toggleBookmark} = useStore();
@@ -44,11 +43,13 @@ const CharacterView = () => {
   const [loadingFilms, setLoadingFilms] = useState(false);
 
   const fetchFilms = async () => {
-    setLoadingFilms(true)
+    setLoadingFilms(true);
     const results = await axios.all(character.films.map((f) => axios.get(f)));
 
+    const filmsData = results.map((r) => r.data);
+
     setLoadingFilms(false);
-    setFilms(results.map((r) => r.data));
+    setFilms(filmsData);
   };
 
   useEffect(() => {
@@ -58,7 +59,7 @@ const CharacterView = () => {
   const isBookmarked = bookmarks.includes(character.name);
 
   return (
-    <SafeAreaView style={styles.body}>
+    <View style={styles.body}>
       <View style={styles.wrapper}>
         <View>
           <Text style={styles.name}>{character.name}</Text>
@@ -68,29 +69,30 @@ const CharacterView = () => {
           <Text style={styles.info}>• Mass: {character.mass}</Text>
           <Text style={styles.info}>• Hair color: {character.hair_color}</Text>
           <Text style={styles.info}>• Skin color: {character.skin_color}</Text>
-          {!!loadingFilms &&
+          {!!loadingFilms && (
             <ActivityIndicator
               style={styles.loading}
               color={Colors.yellow}
               size="large"
             />
-           }
+          )}
           {!!films.length && (
             <View>
               <Text style={styles.info}>• films:</Text>
               <View style={styles.filmsWrapper}>
                 {films.map((f) => (
-                  <Text style={styles.info}>- {f.title}</Text>
+                  <Text key={f.title} style={styles.info}>- {f.title}</Text>
                 ))}
               </View>
             </View>
           )}
         </View>
         <TouchableOpacity
-          testID="ToogleFavorite"
+          testID="ToggleBookmark"
           onPress={() => toggleBookmark(character.name)}>
           <Text>
             <Icon
+              testID="BookmarkIcon"
               name="stars"
               size={30}
               color={isBookmarked ? Colors.yellow : Colors.black}
@@ -98,7 +100,7 @@ const CharacterView = () => {
           </Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -132,7 +134,7 @@ const styles = StyleSheet.create({
   },
   loading: {
     paddingTop: 40,
-  }
+  },
 });
 
 export default CharacterView;
