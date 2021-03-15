@@ -3,8 +3,8 @@
 #### Star Wars wiki app using [Swapi](https://swapi.dev/)
 
 <!-- TABLE OF CONTENTS -->
-<details open="open">
-  <summary><h4 style="display: inline-block">Table of Contents</h4></summary>
+
+  <summary><h3 style="display: inline-block">Table of Contents</h3></summary>
   <ol>
     <li>
       <a href="#getting-started">Getting Started</a>
@@ -12,7 +12,13 @@
     <li><a href="#development">Development</a></li>
     <li><a href="#testing">Testing</a></li>
   </ol>
-</details>
+
+![image](https://user-images.githubusercontent.com/22510441/111149506-b9322c00-856b-11eb-8b22-f9024e7d9058.png)
+
+![image](https://user-images.githubusercontent.com/22510441/111149658-e8489d80-856b-11eb-900d-b1c809264163.png)
+
+
+
 
 
 
