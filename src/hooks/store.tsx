@@ -59,7 +59,7 @@ export default function StoreProvider(props: PropsWithChildren<{}>) {
     const {data} = await axios.get(nextPageUrl);
     const {results, next} = data;
 
-    setNextPageUrl(next);
+    setNextPageUrl(next.replace('http', 'https'));
     setCharactersList([...charactersList, ...results]);
   };
 

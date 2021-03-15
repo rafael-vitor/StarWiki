@@ -44,7 +44,7 @@ const CharacterView = () => {
 
   const fetchFilms = async () => {
     setLoadingFilms(true);
-    const results = await axios.all(character.films.map((f) => axios.get(f)));
+    const results = await axios.all(character.films.map((f) => axios.get(f.replace('http', 'https'))));
 
     const filmsData = results.map((r) => r.data);
 
